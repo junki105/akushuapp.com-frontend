@@ -6,7 +6,7 @@ function ResetPassword() {
                 パスワード再発行
             </div>
             <div className="auth-input-container">
-                <label for="email">メールアドレス</label>
+                <label htmlFor="email">メールアドレス</label>
                 <input type="email" name="email" id="email"/>
             </div>
             <div className="auth-btn-cover">
