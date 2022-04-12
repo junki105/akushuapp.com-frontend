@@ -1,12 +1,16 @@
 
 import {useNavigate} from "react-router-dom";
 import {useRef, useState} from "react";
+import axios from 'axios';
+const baseurl = import.meta.env.REACT_APP_API_BASE_URL;
 function SingleUpload() {
     const navigate = useNavigate();
     const [imageURL, setImageURL] = useState("");
     const [imageObj, setImage] = useState(null);
     const [videoURL, setVideoURL] = useState("");
     const [videoObj, setVideo] = useState(null);
+    const [alertmodal, setShowModal] = useState(false);
+    const [message, setMessage] = useState("");
     const image = useRef();
     const video = useRef();
     const updateImage = (event)=>{
@@ -20,6 +24,29 @@ function SingleUpload() {
         setVideoURL(URL.createObjectURL(fileObj));
         setVideo(fileObj);
     }
+
+    const handleUpload = (event)=>{
+        if(!imageObj){
+            setShowModal(true)
+            setMessage("Please select an Image file");
+            return
+        }
+        if(!videoObj){
+            setShowModal(true)
+            setMessage("Please select a Video file");
+            return
+        }
+        const fd = new FormData();
+        fd.append('image', imageObj);
+        fd.append('video', videoObj);
+        axios.post(`${baseurl}/api/upload`, fd)
+        .then((response)=>{
+           console.log(response);
+        }).catch((error)=> {
+            console.log(error)
+        })
+    }
+    
 
     return(
         <main className="select-type-main">
@@ -47,6 +74,17 @@ function SingleUpload() {
                     </div>
                 </div>
                 <input type="file" onChange={updateVideo} ref={video} style={{display:"none"}} accept=".avi, .mp4, .wmv, mov"/>
+            </div>
+            <div className="combi-main-footer" style={{marginTop:"50px"}}>
+                <div>
+                    <button className="btn gray-btn combi-footer-btn" onClick={()=>{navigate("/");}} style={{marginRight:"20px"}}>戻る</button>
+                    <button className="btn blue-btn combi-footer-btn" onClick={handleUpload}>進む</button>
+                </div>
+            </div>
+            <div className={alertmodal?"modal modal-show":"modal"} onClick={(e)=>{setShowModal(false)}}>
+                <div className="modal-body" onClick={(e)=>{e.stopPropagation()}}>
+                    <p>{message}</p>
+                </div>
             </div>
         </main>
     )

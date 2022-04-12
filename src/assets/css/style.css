@@ -20,6 +20,7 @@ html, body {
     transition: .3s ease;
     font-family: "HiraKakuProN-W6";
     color: white;
+    cursor: pointer;
 }
 
 .btn:hover {
