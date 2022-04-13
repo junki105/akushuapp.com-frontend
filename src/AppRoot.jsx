@@ -8,6 +8,7 @@ import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import ResetPassword from './pages/ResetPassword.jsx';
 import Contact from './pages/Contact.jsx';
+import Order from './pages/Order.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 function AppRoot() {
     var userData =  JSON.parse(localStorage.getItem("userData")) || null;
@@ -20,6 +21,7 @@ function AppRoot() {
                 <Route path="/multiUpload" element={<MultiUpload/>} />
                 <Route path="/login" element={<Login/>} />
                 <Route path="/register" element={<Register/>} />
+                <Route path="/order" element={<Order/>} />
                 <Route path="/resetpassword" element={<ResetPassword/>} />
                 <Route path="/contact" element={<Contact/>} />
                 <Route path="/dashboard"  element={userData?<Navigate to="/dashboard/requestList" replace />:<Navigate to="/" replace />}/>

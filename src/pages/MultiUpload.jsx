@@ -49,7 +49,7 @@ function MultiUpload() {
                     </button>
                 </div>
                 <div>
-                    <button className="btn gray-btn combi-footer-btn">戻る</button>
+                    <button className="btn gray-btn combi-footer-btn" onClick={()=>{navigate("/");}}>戻る</button>
                     <button className="btn blue-btn combi-footer-btn">進む</button>
                 </div>
             </div>

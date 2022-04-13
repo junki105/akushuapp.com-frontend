@@ -2,6 +2,7 @@
 import {useNavigate} from "react-router-dom";
 import {useRef, useState} from "react";
 import axios from 'axios';
+import Preloader from './Preloader';
 const baseurl = import.meta.env.REACT_APP_API_BASE_URL;
 function SingleUpload() {
     const navigate = useNavigate();
@@ -11,6 +12,7 @@ function SingleUpload() {
     const [videoObj, setVideo] = useState(null);
     const [alertmodal, setShowModal] = useState(false);
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false);
     const image = useRef();
     const video = useRef();
     const updateImage = (event)=>{
@@ -39,11 +41,21 @@ function SingleUpload() {
         const fd = new FormData();
         fd.append('image', imageObj);
         fd.append('video', videoObj);
+        setLoading(true)
         axios.post(`${baseurl}/api/upload`, fd)
         .then((response)=>{
-           console.log(response);
+           setLoading(false)
+           navigate("/order");
+          
         }).catch((error)=> {
-            console.log(error)
+            setLoading(false)
+            if(error.response.data.data)
+            {
+                let errordata = JSON. parse(error.response.data.data)
+                let message = errordata.result_code
+                setShowModal(true)
+                setMessage(message);
+            }
         })
     }
     
@@ -86,6 +98,7 @@ function SingleUpload() {
                     <p>{message}</p>
                 </div>
             </div>
+            {loading && <Preloader/>}
         </main>
     )
 }
