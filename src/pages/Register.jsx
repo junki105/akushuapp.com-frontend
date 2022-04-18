@@ -5,11 +5,18 @@ const baseurl = import.meta.env.REACT_APP_API_BASE_URL;
 function Register() {
     const[email, setEmail] = useState("")
     const[password, setPassword] = useState("")
+    const[passwordconfirm, setPasswordConfirm] = useState("")
     const[alertmodal, setShowModal] = useState(false);
     const[message, setMessage] = useState("")
 
     const handleSubmit = (event)=>{
         event.preventDefault();
+        if(password!==passwordconfirm)
+        {
+            setShowModal(true);
+            setMessage("パスワードが正しくありません。");
+            return
+        }
         let data = JSON.stringify({
             "email":email,
             "password":password
@@ -45,6 +52,10 @@ function Register() {
                 <div className="auth-input-container">
                     <label htmlFor="password">パスワード</label>
                     <input type="password" value={password} id="password" onChange={(e)=>{setPassword(e.target.value)}}/>
+                </div>
+                <div className="auth-input-container">
+                    <label htmlFor="passwordconfirm">パスワード確認用</label>
+                    <input type="password" value={passwordconfirm} id="passwordconfirm" onChange={(e)=>{setPasswordConfirm(e.target.value)}}/>
                 </div>
                 <div className="auth-btn-cover">
                     <button className="auth-btn">

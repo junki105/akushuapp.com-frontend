@@ -45,7 +45,7 @@ function SingleUpload() {
         axios.post(`${baseurl}/api/upload`, fd)
         .then((response)=>{
            setLoading(false)
-           navigate("/order");
+           navigate("/preview");
           
         }).catch((error)=> {
             setLoading(false)

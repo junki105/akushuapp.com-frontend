@@ -10,6 +10,7 @@ import ResetPassword from './pages/ResetPassword.jsx';
 import Contact from './pages/Contact.jsx';
 import Order from './pages/Order.jsx';
 import Dashboard from './pages/Dashboard.jsx';
+import Preview from './pages/Preview.jsx'
 function AppRoot() {
     var userData =  JSON.parse(localStorage.getItem("userData")) || null;
     return(
@@ -21,6 +22,7 @@ function AppRoot() {
                 <Route path="/multiUpload" element={<MultiUpload/>} />
                 <Route path="/login" element={<Login/>} />
                 <Route path="/register" element={<Register/>} />
+                <Route path="/preview" element={<Preview/>} />
                 <Route path="/order" element={<Order/>} />
                 <Route path="/resetpassword" element={<ResetPassword/>} />
                 <Route path="/contact" element={<Contact/>} />

@@ -266,8 +266,19 @@ html, body {
     overflow: hidden;
 }
 
-.preview-tab-content img {
+.preview-img-con {
+    position: relative;
     margin-bottom: 40px;
+}
+
+.preview-img-con .img-mark {
+    position: absolute;
+    width: 139px;
+    height: 82px;
+    object-fit: cover;
+    top: 24%;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .preview-sub-text {
@@ -1004,4 +1015,20 @@ html, body {
     99.9% {opacity: 1;}
     100% {opacity: .75;}
 }
+
+.preview-img-con {
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.preview-img-con .img-mark {
+    position: absolute;
+    width: 139px;
+    height: 82px;
+    object-fit: cover;
+    top: 24%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 /* progress bar end  */
