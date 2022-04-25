@@ -4,7 +4,7 @@ function Dashboard() {
    
     return(
         <main className="admin-main">
-        <div className="admin-tab-container">
+        <div class="admin-tab-container" id="admin_tabs">
             <div>
                 <div className="admin-tab active"><img src="/assets/image/bag-icon.png" alt=""/><span>依頼リスト</span></div>
                 <div className="admin-tab"><img src="/assets/image/egg-icon.png" alt=""/><span>見積りリスト</span></div>
@@ -14,6 +14,8 @@ function Dashboard() {
             <div>
                 <button className="btn email-btn img-btn"><img src="/assets/image/email-icon.png" alt=""/><span>クライアント</span></button>
             </div>
+
+
         </div>
         <div className="admin-content">
             <div className="admin-content-header">

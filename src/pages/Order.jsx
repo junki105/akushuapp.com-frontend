@@ -2,7 +2,7 @@
 function Order() {
     return(
             <main className="preview-main order-main">
-                    <div className="preview-main-main">
+                    <div className="preview-main-main _type">
                         <div className="select-type-header font-HiraKakuProN-W6">
                             お見積もり依頼
                         </div>

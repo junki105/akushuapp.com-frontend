@@ -6,7 +6,7 @@ import Preloader from './Preloader';
 const baseurl = import.meta.env.REACT_APP_API_BASE_URL;
 function SingleUpload() {
     const navigate = useNavigate();
-    const [imageURL, setImageURL] = useState("");
+    const [imageURL, setImageURL] = useState([]);
     const [imageObj, setImage] = useState(null);
     const [videoURL, setVideoURL] = useState("");
     const [videoObj, setVideo] = useState(null);
@@ -17,7 +17,8 @@ function SingleUpload() {
     const video = useRef();
     const updateImage = (event)=>{
         let fileObj = event.target.files[0];
-        setImageURL(URL.createObjectURL(fileObj));
+        setImageURL([URL.createObjectURL(fileObj)]);
+        localStorage.setItem("imageData", JSON.stringify([jectURL(fileObj)]))
         setImage(fileObj);
     }
 
@@ -67,7 +68,7 @@ function SingleUpload() {
             </div>
             <div className="select-type-container" >
                 <div className="select-type-card" onClick={(e) => image.current.click()}>
-                    <img src={imageURL==="" ? "assets/image/single-upload-img.png":imageURL} alt="" />
+                    <img src={imageURL.length===0 ? "assets/image/single-upload-img.png":imageURL} alt="" />
                     <div className="card-text1 font-HiraKakuProN-W6">
                         Image
                     </div>

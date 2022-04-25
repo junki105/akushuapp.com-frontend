@@ -1,5 +1,25 @@
 
+import {useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+
+const tabs = [
+    "t-shirt",
+    "long-sleeves",
+    "winter_clothes"
+]
+
 function Preview() {
+    const [imageURL, setImageURL] = useState([]);
+    const [tab, setTab] = useState(0);
+    useEffect(()=>{
+        var imageData =  JSON.parse(localStorage.getItem("imageData")) || null;
+        
+        if(imageData)
+        {
+            setImageURL(imageData)
+        }
+
+    },[])
     return(
         <main className="preview-main">
             <div className="preview-tab-lists">
@@ -21,22 +41,14 @@ function Preview() {
             </div>
             
             <div className="preview-tab-content">
-                <div className="preview-img-con">
-                    <img src="assets/image/t-shirt.png" className="img-back" alt=""/>
-                    <img src="assets/image/marker.png" className="img-mark" alt=""/>
-                </div>
-                {/* <div className="preview-img-con">
-                    <img src="assets/image/t-shirt.png" className="img-back" alt=""/>
-                    <img src="assets/image/marker.png" className="img-mark" alt=""/>
-                </div>
-                <div className="preview-img-con">
-                    <img src="assets/image/t-shirt.png" className="img-back" alt=""/>
-                    <img src="assets/image/marker.png" className="img-mark" alt=""/>
-                </div>
-                <div className="preview-img-con">
-                    <img src="assets/image/t-shirt.png" className="img-back" alt=""/>
-                    <img src="assets/image/marker.png" className="img-mark" alt=""/>
-                </div> */}
+                {
+                    imageURL.map((item)=>(
+                    <div className="preview-img-con">
+                        <img src={`assets/image/${tabs[tab]}.png`} className="img-back" alt=""/>
+                        <img src={item} className="img-mark" alt=""/>
+                    </div>
+                    ))
+                }
             </div>
         </div>
         <div className="preview-footer">
