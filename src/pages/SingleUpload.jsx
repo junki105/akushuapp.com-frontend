@@ -18,7 +18,7 @@ function SingleUpload() {
     const updateImage = (event)=>{
         let fileObj = event.target.files[0];
         setImageURL([URL.createObjectURL(fileObj)]);
-        localStorage.setItem("imageData", JSON.stringify([jectURL(fileObj)]))
+       
         setImage(fileObj);
     }
 
@@ -45,8 +45,16 @@ function SingleUpload() {
         setLoading(true)
         axios.post(`${baseurl}/api/upload`, fd)
         .then((response)=>{
+           localStorage.setItem("imageData", response.data.imageFile)
+           localStorage.setItem("targetID", response.data.imageID)
            setLoading(false)
-           navigate("/preview");
+           navigate("/preview",
+                {
+                    state: {
+                        imageData: [response.data.imageFile],
+                        targetID:response.data.imageID
+                }
+           });
           
         }).catch((error)=> {
             setLoading(false)

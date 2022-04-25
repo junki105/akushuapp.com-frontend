@@ -161,6 +161,7 @@ html, body {
 .header-text {
     font-size: 20px;
     font-family: "HiraKakuProN-W6";
+    cursor: pointer;
 }
 /* header nav end  */
 

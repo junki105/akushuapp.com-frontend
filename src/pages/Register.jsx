@@ -1,8 +1,11 @@
 import { useState} from 'react'
 import axios from 'axios';
+import {useNavigate} from "react-router-dom";
 const baseurl = import.meta.env.REACT_APP_API_BASE_URL;
 
 function Register() {
+    
+    const navigate = useNavigate();
     const[email, setEmail] = useState("")
     const[password, setPassword] = useState("")
     const[passwordconfirm, setPasswordConfirm] = useState("")
@@ -31,12 +34,19 @@ function Register() {
         };
         axios(config)
         .then((response) => {
-            setShowModal(true);
-            setMessage("success");
+            navigate("/login");
         })
         .catch((error)=>{
-            setShowModal(true);
-            setMessage("failed");
+            if(error.response){
+                if(error.response.data)
+                {
+                    var errordata = error.response.data;
+                    if(errordata.email){
+                        setShowModal(true);
+                        setMessage(errordata.email);
+                    }
+                }
+            }
         })
     }
     return(
