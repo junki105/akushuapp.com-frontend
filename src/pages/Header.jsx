@@ -13,7 +13,7 @@ function Header() {
                 <button className="btn blue-btn header-nav-btn" onClick={()=>{navigate("/contact");}}>お問い合わせ</button>
                 <button className="btn yellow-btn header-nav-btn" onClick={()=>{navigate("/login");}}>ログイン</button>
             </div>
-            <div className="toggle-menu-btn" id="toggle_menu_btn" onclick="toggleMenu()">
+            <div className="toggle-menu-btn" id="toggle_menu_btn" onClick="toggleMenu()">
                 <span></span>
                 <span></span>
                 <span></span>

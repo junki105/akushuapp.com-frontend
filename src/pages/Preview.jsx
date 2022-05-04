@@ -1,7 +1,11 @@
 
 import {useNavigate, useLocation} from "react-router-dom";
+
 import {useEffect, useState} from "react";
+import axios from "axios";
+
 const baseurl = import.meta.env.REACT_APP_API_BASE_URL;
+
 const tabs = [
     "t-shirt",
     "long-sleeves",
@@ -14,14 +18,35 @@ const toppixel =[
 
 function Preview() {
     const location = useLocation();
-    const [imageURL, setImageURL] = useState([]);
+    const navigate = useNavigate();
+    const [uploadData, setUloadDataURL] = useState([]);
     const [tab, setTab] = useState(0);
     useEffect(()=>{
-        var imageData = location.state.imageData
-        if(imageData){
-            setImageURL(imageData)
+        var data = location.state.uploadData
+        if(data){
+            setUloadDataURL(data)
         }
     },[])
+
+    const handleGoback = ()=>{
+        localStorage.removeItem("uploadData");
+        let config = {
+            method: 'post',
+            url: `${baseurl}/api/removeCombilist`,
+            headers: { 
+                'Content-Type': 'application/json'
+            },
+                data : uploadData,
+        };
+        axios(config)
+        .then((response) => {
+        })
+        .catch((error)=>{
+           console.log(error)
+        })
+        navigate(-1)
+    }
+    
     return(
         <main className="preview-main">
             <div className="preview-tab-lists">
@@ -41,17 +66,28 @@ function Preview() {
                 プレビューをお楽しみください。<br/>
                 <span className="preview-sub-text"> アプリを起動してマーカーにかざしてみましょう。</span>
             </div>
-            
-            <div className="preview-tab-content">
-                {
-                    imageURL.map((item, index)=>(
-                        <div key={index} className="preview-img-con">
-                            <img src={`assets/image/${tabs[tab]}.png`} className="img-back" alt="" />
-                            <img src={`${baseurl}/media/${item}`} className="img-mark" alt="" style={{top:toppixel[tab]}}/>
-                        </div>
-                    ))
-                }
-            </div>
+            {
+                uploadData.map((item, index)=>(
+                    <div key={index} className="preview-tab-content">
+                                {item.img1!=="" &&
+                                <div  className="preview-img-con">
+                                    <img src={`assets/image/${tabs[tab]}.png`} className="img-back" alt="" />
+                                    <img src={`${baseurl}/media/${item.img1}`} className="img-mark" alt="" style={{top:toppixel[tab]}}/>
+                                </div>}
+                                {item.img2!=="" &&
+                                <div  className="preview-img-con">
+                                    <img src={`assets/image/${tabs[tab]}.png`} className="img-back" alt="" />
+                                    <img src={`${baseurl}/media/${item.img2}`} className="img-mark" alt="" style={{top:toppixel[tab]}}/>
+                                </div>}
+                                {item.img3!=="" &&
+                                <div  className="preview-img-con">
+                                    <img src={`assets/image/${tabs[tab]}.png`} className="img-back" alt="" />
+                                    <img src={`${baseurl}/media/${item.img3}`} className="img-mark" alt="" style={{top:toppixel[tab]}}/>
+                                </div>}
+                        
+                    </div>
+                ))
+            }
         </div>
         <div className="preview-footer">
             <div className="preview-footer-imgs">
@@ -69,8 +105,15 @@ function Preview() {
                 </div>
             </div>
             <div className="preview-footer-btns">
-                <button className="btn footer-arrow-btn font-HiraKakuProN-W6">&lt;</button>
-                <button className="btn blue-btn footer-btn">先に進む</button>
+                <button className="btn footer-arrow-btn font-HiraKakuProN-W6" onClick={handleGoback}>&lt;</button>
+                <button className="btn blue-btn footer-btn" onClick={()=>{
+                    navigate("/order",
+                        {
+                            state: {
+                                type: tab,
+                            }
+                        }
+                    );}}>先に進む</button>
             </div>
         </div>
     </main>

@@ -45,14 +45,12 @@ function SingleUpload() {
         setLoading(true)
         axios.post(`${baseurl}/api/upload`, fd)
         .then((response)=>{
-           localStorage.setItem("imageData", response.data.imageFile)
-           localStorage.setItem("targetID", response.data.imageID)
+           localStorage.setItem("uploadData",JSON.stringify(response.data.combiList));
            setLoading(false)
            navigate("/preview",
                 {
                     state: {
-                        imageData: [response.data.imageFile],
-                        targetID:response.data.imageID
+                        uploadData: response.data.combiList,
                 }
            });
           
