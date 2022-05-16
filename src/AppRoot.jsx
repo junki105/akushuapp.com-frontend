@@ -11,8 +11,10 @@ import Contact from './pages/Contact.jsx';
 import Order from './pages/Order.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Preview from './pages/Preview.jsx'
+import OrderThanks from './pages/OrderThanks.jsx'
 function AppRoot() {
     var userData =  JSON.parse(localStorage.getItem("userData")) || null;
+    
     return(
         <Router>
             <Header/>
@@ -24,9 +26,10 @@ function AppRoot() {
                 <Route path="/register" element={<Register/>} />
                 <Route path="/preview" element={<Preview/>} />
                 <Route path="/order" element={<Order/>} />
+                <Route path="/orderthanks" element={<OrderThanks/>} />
                 <Route path="/resetpassword" element={<ResetPassword/>} />
                 <Route path="/contact" element={<Contact/>} />
-                <Route path="/dashboard"  element={userData?<Navigate to="/dashboard/requestList" replace />:<Navigate to="/" replace />}/>
+                <Route path="/dashboard"  element={userData ?<Navigate to="/dashboard/requestList" replace />:<Navigate to="/" replace />}/>
                 <Route path="/dashboard/*"  element={userData?<Dashboard/>:<Navigate to="/" replace />}/>
                 {/* <Route path="/synopsis" element={<Synopsis/>} />
                 <Route path="/talk/:id" element={<Talk />} />

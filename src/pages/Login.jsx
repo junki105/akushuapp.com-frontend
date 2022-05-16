@@ -33,7 +33,8 @@ function Login() {
         };
         axios(config)
         .then(async (response) => {
-            setUserData(response.data);
+            setUserData({token:response.data.token,refresh:response.data.refresh, usertype:response.data.userStatus});
+
             window.location.assign("/dashboard");
         })
         .catch((error)=>{

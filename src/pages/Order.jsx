@@ -26,10 +26,16 @@ function Order() {
     const [email, setEmail] = useState("");
     const [postalCode, setPostalCode] = useState("");
     const [prefecture, setPrefecture] = useState("");
-    const [city, setCity] = useState("")
-    const [address, setAddress] = useState("")
-    const [building, setBuilding] = useState("")
-    const [phoneNumber, setPhoneNumber] = useState("")
+    const [city, setCity] = useState("");
+    const [address, setAddress] = useState("");
+    const [building, setBuilding] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [password, setPassword] = useState("");
+    const [passwordConfirm, setPasswordConfirm] = useState("")
+    const[alertmodal, setShowModal] = useState(false);
+    const[settingPasswordModal, showSettingModal] = useState(false)
+    const[showPassword, setShowPassword] = useState(false)
+    const[message, setMessage] = useState("")
     useEffect(()=>{
         let data = localStorage.getItem("uploadData")   
         if(data){
@@ -42,22 +48,123 @@ function Order() {
     const handleChangeAmount = (index, value) =>{
         let orderdata = orderList;
         orderdata[index].amount = parseInt(value)
-
         setOrderList([...orderdata])
     }
 
     const handleSubmit = ()=>{
+        if(companyName=="")
+        {
+            setShowModal(true);
+            setMessage("会社名を入力してください。");
+            return
+        }
+        if(name=="")
+        {
+            setShowModal(true);
+            setMessage("氏名を入力してください。");
+            return
+        }
+        if(email=="")
+        {
+            setShowModal(true);
+            setMessage("メールアドレスを入力してください。");
+            return
+        }
+        let checkuserdata = JSON.stringify({
+            "email":email
+        })
+        let checkuserconfig = {
+            method:'post',
+            url:`${baseurl}/api/checkEmail`,
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            data:checkuserdata
+        }
+        axios(checkuserconfig)
+        .then((response)=>{
+            if(response.data.code=="2")
+            {
+                setShowModal(true);
+                setMessage("You can not order with admin email address");
+            }
+            else if(response.data.code=="1"){
+                let data = JSON.stringify({
+                    "orderList":orderList,
+                    "email":email,
+                    "orderstatus":1,
+                    "type":location.state.type
+                });
+                let config = {
+                    method: 'post',
+                    url: `${baseurl}/api/order`,
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    },
+                        data : data,
+                };
+                axios(config)
+                .then((response) => {
+                    navigate("/orderthanks")
+                })
+                .catch((error)=>{
+                    if(error.response){
+                    }
+                })
+            }
+            else{
+                showSettingModal(true);
+                setMessage(<label style={{color:"red", fontSize:"11px"}}>登録されていないメールアドレスです。<br/>
+                    この情報で登録するにはパスワードを設定してください。
+                </label>);
+            }
+        })
+        .catch((error)=>{
+            if(error.response){
+                if(error.response.data)
+                {
+                    var errordata = error.response.data;
+                    if(errordata.code=="BadEmail"){
+                        setShowModal(true);
+                        setMessage("正しいメールアドレスを入力してください。");
+                    }
+                }
+            }
+        })
+    }
+
+    const handleSubmitWithPassword = ()=>{
+        if(password==="")
+        {
+            setMessage(
+                <label style={{color:"red", fontSize:"11px"}}>パスワードを入力してください。</label>
+            );
+            return
+        }
+        if(password!==passwordConfirm)
+        {
+            setMessage(
+                <label style={{color:"red", fontSize:"11px"}}>パスワードが正しくありません。</label>
+            );
+            return
+        }
+        
         let data = JSON.stringify({
             "orderList":orderList,
-            "companyName":companyName,
-            "name":name,
-            "email":email,
-            "postalCode":postalCode,
-            "prefecture":prefecture,
-            "city":city,
-            "address":address,
-            "building":building,
-            "phoneNumber":phoneNumber
+            "userData":{
+                "companyName":companyName,
+                "name":name,
+                "email":email,
+                "postalCode":postalCode,
+                "prefecture":prefecture,
+                "city":city,
+                "address":address,
+                "building":building,
+                "phoneNumber":phoneNumber,
+                "password":password
+            },
+            "orderstatus":2,
+            "type":location.state.type
         });
         let config = {
             method: 'post',
@@ -69,7 +176,7 @@ function Order() {
         };
         axios(config)
         .then((response) => {
-            
+            navigate("/orderthanks")
         })
         .catch((error)=>{
             if(error.response){
@@ -155,6 +262,32 @@ function Order() {
                         <div className="preview-footer-btns">
                             <button className="btn footer-arrow-btn font-HiraKakuProN-W6" onClick={()=> {navigate(-1)}}>&lt;</button>
                             <button className="btn yellow-btn footer-btn" onClick={handleSubmit}>依頼する</button>
+                        </div>
+                    </div>
+                    <div className={alertmodal?"modal modal-show":"modal"} onClick={(e)=>{setShowModal(false)}}>
+                        <div className="modal-body" onClick={(e)=>{e.stopPropagation()}}>
+                            <p>{message}</p>
+                        </div>
+                    </div>
+
+                    <div className={settingPasswordModal?"modal modal-show":"modal"}>
+                        <div className="modal-body">
+                            <p style={{color:"red"}}>{message}</p>
+                            <div className="order-input-container">
+                                    <label className="font-HiraKakuProN-W6">パスワード</label>
+                                    <input style={{width: "calc(100% - 140px)"}} type={showPassword?"text":"password"} value={password} onChange={(e)=>{setPassword(e.target.value)}}/>
+                            </div>
+                            <div className="order-input-container" style={{marginBottom:"20px"}}>
+                                    <label className="font-HiraKakuProN-W6">パスワード確認</label>
+                                    <input style={{width: "calc(100% - 140px)"}} type={showPassword?"text":"password"} value={passwordConfirm} onChange={(e)=>{setPasswordConfirm(e.target.value)}}/>
+                            </div>
+                            <input type="checkbox" name="show-check" id="show-check" onChange={(e)=>{setShowPassword(!showPassword)}}/>
+                            <label htmlFor="show-check" className="font-HiraKakuProN-W6">パスワードを表示</label>
+                            <div style={{textAlign:"right", marginTop:"20px"}}>
+                                <button className="btn yellow-btn header-nav-btn" onClick={handleSubmitWithPassword}>確認</button>
+                                <button className="btn yellow-btn header-nav-btn" onClick={()=>{showSettingModal(false)}}>閉じる</button>
+                            </div>
+                            
                         </div>
                     </div>
                 </main>
